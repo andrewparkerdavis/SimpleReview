@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Reviews</title>
+    <meta charset="utf-8">
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="Your description">
+    <meta name="keywords" content="Your keywords">
+    <meta name="author" content="Your name">
+    <meta name = "format-detection" content = "telephone=no" />
+    <link rel="stylesheet" href="css/bootstrap.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="css/responsive.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="css/jqtransform.css" type="text/css">
+
+
+		<script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/superfish.js"></script>
+    <script type="text/javascript" src="js/jquery.mobilemenu.js"></script>
+    <script src="js/jquery.jqtransform.js"></script>
+    <script src="js/underscore-1.1.6.js"></script>
+
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.1.15.min.js"></script>
+    <script type="text/javascript" src="js/reviews.js"></script>
+
+  
+
+
+
+  	<!--[if lt IE 8]>
+    		<div style='text-align:center'><a href="http://www.microsoft.com/windows/internet-explorer/default.aspx?ocid=ie6_countdown_bannercode"><img src="http://www.theie6countdown.com/img/upgrade.jpg"border="0"alt=""/></a></div>  
+   	<![endif]-->
+    <!--[if lt IE 9]>
+      <link rel="stylesheet" href="css/ie.css" type="text/css" media="screen">
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div id="mainapp">
+      <div class="content">
+      </div>
+</div>
+
+<script type="text/template" id="not-logged-in-nav-template">
+  <ul>
+    <li>
+      <a href="signup.html">Sign Up</a>
+    </li>
+    <li>
+      <a href="login.html">Log In</a>
+    </li>
+  </ul>
+</script>
+<script type="text/template" id="logged-in-nav-template">
+  You are logged in as <%= Parse.User.current().get("username") %> (<a href="#" class="log-out">Log out</a>)
+</script>
+
+<script type="text/template" id="home-nav-search-template">
+  <div class="div-search">
+    <form id="search" action="search.php" method="GET" accept-charset="utf-8">
+      <input type="text" value="" name="s">
+      <a href="#" onClick="document.getElementById('search').submit()">Search</a>
+    </form>
+  </div>
+</script>
+
+<script type="text/template" id="home-template">
+
+<!--==============================header=================================-->
+<header>
+    <div class="container">
+         <div class="navbar navbar_ clearfix">
+            <div class="navbar-inner">      
+                  <div class="clearfix">
+                  	<h1 class="brand"><a href="index.html"><img src="img/logo.png" alt=""></a><span>Games The biggest choice on the web</span></h1>
+
+                    <div class="div-search" id="nav-search"> <!-- // Matches to home-nav-search-template -->
+              
+                    </div>
+                    <div id="nav-login-signup"> <!-- // Matches to not-logged-in-template or logged-in-nav-template -->
+
+                    </div>
+                    
+                  </div>
+                	<div class="nav-collapse nav-collapse_ collapse">
+                	    <ul class="nav sf-menu clearfix">
+                	      <li><a href="index.html">Home</a></li>
+                	      <li class="sub-menu"><a href="index-1.html">Games</a>
+                	         <ul>
+                	          <li><a href="#">Lorem ipsum dolor </a></li>
+                	          <li><a href="#">Sit amet conse </a></li>
+                	          <li><a href="#">Ctetur adipisicing elit</a></li>
+                	          <li><a href="#">Sed do eiusmod </a></li>
+                	          <li><a href="#">Tempor incididunt ut </a></li>
+                            <li><a href="#">Labore et </a></li>
+                	         </ul>
+                	      </li>
+                	      <li class="active"><a href="index-2.html">Reviews</a></li>
+                	      <li><a href="index-3.html">News</a></li>
+                	      <li><a href="index-4.html">Contacts</a></li>
+                	    </ul>
+                	</div>
+                  
+             </div>  
+         </div>
+    </div>
+</header>
+<div id="content">
+  <div class="container"> 
+        
+        <div class="row">
+          <article class="span8">
+            <h2>Reviews</h2>
+            <form id="form-2">
+                <fieldset class="d-block">
+                    <div class="box-1">
+                        <select name="select1">
+                            <option value="opt1">All Platforms</option>
+                            <option value="opt2">All Platforms</option>
+                        </select>
+                    </div>
+                    <div class="box-1">
+                        <select name="select1">
+                            <option value="opt1">All Games</option>
+                            <option value="opt2">All Games</option>
+                        </select>
+                    </div>
+                    <a href="#" class="btn btn-2"  onClick="document.getElementById('form-2').submit()">Find Now</a><br>
+                    <a href="#" class="link-form">Browse All Games »</a>
+                </fieldset>
+            </form>
+            <ul class="list-reviews">
+              <li>
+                <figure class="img-polaroid"><img src="img/page-2-img.jpg" alt=""></figure>
+                <div class="div-score">
+                  Our score
+                  <span>4.5</span>
+                  Poor
+                </div>
+                <div class="extra-wrap">
+                  <span class="font14 col14">Proin dictum</span>
+                  <p>Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatu... <a href="#">full review</a></p>
+                </div>
+                
+              </li>
+
+              <li>
+                <figure class="img-polaroid"><img src="img/page-2-img-1.jpg" alt=""></figure>
+                <div class="div-score">
+                  Our score
+                  <span>7.0</span>
+                  Poor
+                </div>
+                <div class="extra-wrap">
+                  <span class="font14 col14">Vestibulum iaculis</span>
+                  <p>Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatu... <a href="#">full review</a></p>
+                </div>
+                
+              </li>
+
+              <li>
+                <figure class="img-polaroid"><img src="img/page-2-img-2.jpg" alt=""></figure>
+                <div class="div-score">
+                  Our score
+                  <span>5.2</span>
+                  Poor
+                </div>
+                <div class="extra-wrap">
+                  <span class="font14 col14">Pellentesque </span>
+                  <p>Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatu... <a href="#">full review</a></p>
+                </div>
+                
+              </li>
+
+              <li>
+                <figure class="img-polaroid"><img src="img/page-2-img-3.jpg" alt=""></figure>
+                <div class="div-score">
+                  Our score
+                  <span>6.5</span>
+                  Poor
+                </div>
+                <div class="extra-wrap">
+                  <span class="font14 col14">Auctor ut ligula </span>
+                  <p>Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatu... <a href="#">full review</a></p>
+                </div>
+                
+              </li>
+            </ul>
+          </article>
+          <article class="span4">
+            <div class="blog-box">
+              <span>Our Blog</span>
+              <p>Aenean nonummy hendrerit mauris. Phasellus porta. Fusce suscipit varius mi. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla dui. Fusce feugiat malesuada odio. Morbi nunc odio, gravida at, cursus nec, luctus a, lorem. Maecenas tristique orci ac sem. Duis ultricies pharetra magna. Donec accumsan malesuada orci. Donec sit amet eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </p>
+              <a href="#" class="btn-2">Read more</a>
+            </div>
+            <h2>Reviews Updates</h2>
+            <ul class="list-updates">
+              <li>
+                <p><span class="font14">Praesent vestibulum molestie lacus.</span> Aenean nonummy hendrerit mauris. Phasellus porta. Fusce suscipit varius mi. Cum sociis natoque penatibus.</p>
+              </li>
+             <li>
+                <p><span class="font14">Lorem ipsum dolor sit amet,</span> consectetuer adipiscing elit. Praesent vestibulum molestie lacus. Donec sagittis euismod purus. Aenean nonummy hendrerit mauris. </p>
+              </li>
+              <li>
+                <p><span class="font14">Fusce euismod consequat ante. </span> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Pellentesque sed dolor. Aliquam congue fermentum nisl. </p>
+              </li>
+            </ul>
+            <a href="#" class="link">See all</a>
+          </article>
+
+          
+        </div>
+
+  </div>
+</div>
+<footer>
+  <div class="container">
+	     <div class="row">
+	         
+           <article class="span6 fright">
+             <ul class="soc-icons">
+               <li><a href="#" id="icon"></a></li>
+               <li><a href="#" id="icon-1"></a></li>
+               <li><a href="#" id="icon-2"></a></li>
+               <li><a href="#" id="icon-3"></a></li>
+             </ul>
+           </article>
+           <article class="span6  fleft">
+                 <span><a href="index.html">Games</a> &copy; 2013&nbsp;&nbsp;&nbsp;&nbsp;</span><a href="index-5.html">Privacy Policy</a>
+                 
+           </article>
+       </div>
+  </div>
+</footer>
+</script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
+</body>
+</html>
