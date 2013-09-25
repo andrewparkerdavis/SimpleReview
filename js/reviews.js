@@ -7,8 +7,8 @@ $(function() {
   Parse.$ = jQuery;
 
   // Initialize Parse with your Parse application javascript keys
-  Parse.initialize("0Oq3tTp9JMvd72LOrGN25PiEq9XgVHCxo57MQbpT",
-                   "vUFy2o7nFx3eeKVlZneYMPI2MBoxT5LhWNoIWPja");
+  Parse.initialize("t0PIynmyht1hN0ORLTYPKKL8OFVuAVYFbzd25V12",
+                   "BhGFfHKdLl4mL0lc1AFmv43aWknXc1fbTDSYt1Jg");
 
   
 
@@ -18,79 +18,36 @@ $(function() {
 
  
 
-  var LogInView = Parse.View.extend({
-    events: {
-      "submit form.login-form": "logIn",
-      "submit form.signup-form": "signUp"
-    },
-
-    el: ".content",
-    
-    initialize: function() {
-      _.bindAll(this, "logIn", "signUp");
-      this.render();
-    },
-
-    logIn: function(e) {
-      var self = this;
-      var username = this.$("#login-username").val();
-      var password = this.$("#login-password").val();
-      
-      Parse.User.logIn(username, password, {
-        success: function(user) {
-          new ManageTodosView();
-          self.undelegateEvents();
-          delete self;
-        },
-
-        error: function(user, error) {
-          self.$(".login-form .error").html("Invalid username or password. Please try again.").show();
-          this.$(".login-form button").removeAttr("disabled");
-        }
-      });
-
-      this.$(".login-form button").attr("disabled", "disabled");
-
-      return false;
-    },
-
-    signUp: function(e) {
-      var self = this;
-      var username = this.$("#signup-username").val();
-      var password = this.$("#signup-password").val();
-      
-      Parse.User.signUp(username, password, { ACL: new Parse.ACL() }, {
-        success: function(user) {
-          new ManageTodosView();
-          self.undelegateEvents();
-          delete self;
-        },
-
-        error: function(user, error) {
-          self.$(".signup-form .error").html(error.message).show();
-          this.$(".signup-form button").removeAttr("disabled");
-        }
-      });
-
-      this.$(".signup-form button").attr("disabled", "disabled");
-
-      return false;
-    },
-
-    render: function() {
-      this.$el.html(_.template($("#login-template").html()));
-      this.delegateEvents();
-    }
-  });
+  /* Main Page */
 
   var HomeView = Parse.View.extend({
     el: ".content",
+
+   events: {
+      "click .log-out": "logOut",
+      "click .login-link": "displayLogin",
+      "click .signup-link": "displaySignup"
+    },
+
+ 
 
     initialize: function() {
       var self = this;
       self.render();
 
       return self;
+    },
+
+
+    displayLogin: function(e) {
+      new LogInView();
+      this.undelegateEvents();
+      delete this;
+    },
+    displaySignup: function(e) {
+      new SignUpView();
+      this.undelegateEvents();
+      delete this;
     },
 
     render: function() {
@@ -102,46 +59,25 @@ $(function() {
         new NotLoggedInNavView();
       }     
     },
+    remove: function() {
+      // Empty the element and remove it from the DOM while preserving events
+      $(this.el).empty().detach();
+
+      return this;
+    },
 
     // Logs out the user and shows the login view
     logOut: function(e) {
       Parse.User.logOut();
-      new LogInView();
-      this.undelegateEvents();
-      delete this;
+      this.render();      
     }    
 
 
   });
 
-  var LoggedInNavView = Parse.View.extend ({
-    el: "#nav-login-signup",
 
-    initialize: function() {
-      var self = this;
-      this.render();
-    },
-
-    render: function() {
-      this.$el.html(_.template($("#logged-in-nav-template").html()));
-    }
-
-  });
-
- var SearchNavView = Parse.View.extend ({
-    el: "#nav-search",
-
-    initialize: function() {
-      var self = this;
-      self.render();
-    },
-
-    render: function() {
-      this.$el.html(_.template($("#home-nav-search-template").html()));
-    }
-
-  });
-
+ 
+ /* Login and Signup */
 
   var NotLoggedInNavView = Parse.View.extend ({
     el: "#nav-login-signup",
@@ -158,16 +94,29 @@ $(function() {
   });
 
 
-  var LogInView = Parse.View.extend({
+  var LoggedInNavView = Parse.View.extend ({
+    el: "#nav-login-signup",
+
+    initialize: function() {
+      var self = this;
+      this.render();
+    },
+
+    render: function() {
+      this.$el.html(_.template($("#logged-in-nav-template").html()));
+    }
+
+  });
+
+   var LogInView = Parse.View.extend({
     events: {
-      "submit form.login-form": "logIn",
-      "submit form.signup-form": "signUp"
+      "submit form.login-form": "logIn"
     },
 
     el: ".content",
     
     initialize: function() {
-      _.bindAll(this, "logIn", "signUp");
+      _.bindAll(this, "logIn");
       this.render();
     },
 
@@ -178,9 +127,10 @@ $(function() {
       
       Parse.User.logIn(username, password, {
         success: function(user) {
-          new ManageTodosView();
+          new HomeView();
           self.undelegateEvents();
           delete self;
+
         },
 
         error: function(user, error) {
@@ -194,6 +144,33 @@ $(function() {
       return false;
     },
 
+    remove: function() {
+      // Empty the element and remove it from the DOM while preserving events
+      $(this.el).empty().detach();
+
+      return this;
+    },
+
+    render: function() {
+      this.$el.html(_.template($("#login-template").html()));
+      this.delegateEvents();
+    }
+  });
+
+var SignUpView = Parse.View.extend({
+    events: {
+      "submit form.signup-form": "signUp"
+    },
+
+    el: ".content",
+    
+    initialize: function() {
+      _.bindAll(this, "signUp");
+      this.render();
+    },
+
+    
+
     signUp: function(e) {
       var self = this;
       var username = this.$("#signup-username").val();
@@ -201,10 +178,10 @@ $(function() {
       
       Parse.User.signUp(username, password, { ACL: new Parse.ACL() }, {
         success: function(user) {
-          new ManageTodosView();
+         new HomeView();
           self.undelegateEvents();
           delete self;
-        },
+      },
 
         error: function(user, error) {
           self.$(".signup-form .error").html(error.message).show();
@@ -216,12 +193,49 @@ $(function() {
 
       return false;
     },
+    remove: function() {
+      // Empty the element and remove it from the DOM while preserving events
+      $(this.el).empty().detach();
+
+      return this;
+    },
 
     render: function() {
-      this.$el.html(_.template($("#login-template").html()));
+      this.$el.html(_.template($("#signup-template").html()));
       this.delegateEvents();
     }
   });
+
+/* End login and signup */
+
+
+/* Site Functionality */
+
+
+/* Search */
+
+var SearchNavView = Parse.View.extend ({
+    el: "#nav-search",
+
+    initialize: function() {
+      var self = this;
+      self.render();
+    },
+    remove: function() {
+      // Empty the element and remove it from the DOM while preserving events
+      $(this.el).empty().detach();
+
+      return this;
+    },
+
+    render: function() {
+      this.$el.html(_.template($("#home-nav-search-template").html()));
+    }
+
+  });
+
+
+/* App and Routers */
 
  var AppState = Parse.Object.extend("AppState", {
     defaults: {
