@@ -47,10 +47,10 @@
 <script type="text/template" id="not-logged-in-nav-template">
   <ul>
     <li>
-      <a href="signup.html">Sign Up</a>
+      <a class="signup-link" href="#">Sign Up</a>
     </li>
     <li>
-      <a href="login.html">Log In</a>
+      <a class="login-link" href="#">Log In</a>
     </li>
   </ul>
 </script>
@@ -67,6 +67,156 @@
   </div>
 </script>
 
+<script type="text/template" id="login-template">
+    <header>
+        <div class="container">
+             <div class="navbar navbar_ clearfix">
+                <div class="navbar-inner">      
+                      <div class="clearfix">
+                        <h1 class="brand"><a href="index.html"><img src="img/logo.png" alt=""></a><span>Games The biggest choice on the web</span></h1>
+                      </div>
+                      
+                 </div>  
+             </div>
+        </div>
+    </header>
+    <div id="content">
+      <div class="container"> 
+            
+            <div class="row">
+              <div class="login">
+                <form class="login-form">
+                  <h2>Log In</h2>
+                  <div class="error" style="display:none"></div>
+                  <input type="text" id="login-username" placeholder="Username" />
+                  <input type="password" id="login-password" placeholder="Password" />
+                  <button>Log In</button>
+                </form>    
+              </div>        
+            </div>
+
+
+      </div>
+    </div>
+    <footer>
+      <div class="container">
+           <div class="row">
+               
+               <article class="span6 fright">
+                 <ul class="soc-icons">
+                   <li><a href="#" id="icon"></a></li>
+                   <li><a href="#" id="icon-1"></a></li>
+                   <li><a href="#" id="icon-2"></a></li>
+                   <li><a href="#" id="icon-3"></a></li>
+                 </ul>
+               </article>
+               <article class="span6  fleft">
+                     <span><a href="index.html">Games</a> &copy; 2013&nbsp;&nbsp;&nbsp;&nbsp;</span><a href="index-5.html">Privacy Policy</a>
+                     
+               </article>
+           </div>
+      </div>
+    </footer>
+
+  </script>
+
+   <script type="text/template" id="signup-template">
+    <header>
+        <div class="container">
+             <div class="navbar navbar_ clearfix">
+                <div class="navbar-inner">      
+                      <div class="clearfix">
+                        <h1 class="brand"><a href="index.html"><img src="img/logo.png" alt=""></a><span>Games The biggest choice on the web</span></h1>
+                      </div>
+                      
+                 </div>  
+             </div>
+        </div>
+    </header>
+    <div id="content">
+      <div class="container"> 
+            
+            <div class="row">
+              <div class="login">
+               <form class="signup-form">
+                  <h2>Sign Up</h2>
+                  <div class="error" style="display:none"></div>
+                  <input type="text" id="signup-username" placeholder="Username" />
+                  <input type="password" id="signup-password" placeholder="Create a Password" />
+                  <button>Sign Up</button>
+                </form>
+              </div>        
+            </div>
+
+
+      </div>
+    </div>
+    <footer>
+      <div class="container">
+           <div class="row">
+               
+               <article class="span6 fright">
+                 <ul class="soc-icons">
+                   <li><a href="#" id="icon"></a></li>
+                   <li><a href="#" id="icon-1"></a></li>
+                   <li><a href="#" id="icon-2"></a></li>
+                   <li><a href="#" id="icon-3"></a></li>
+                 </ul>
+               </article>
+               <article class="span6  fleft">
+                     <span><a href="index.html">Games</a> &copy; 2013&nbsp;&nbsp;&nbsp;&nbsp;</span><a href="index-5.html">Privacy Policy</a>
+                     
+               </article>
+           </div>
+      </div>
+    </footer>
+
+  </script>
+
+<script type="text/template" id="product-page">
+    <article class="span8">
+     
+    </article>
+</script>
+
+<script type="text/template" id="best-of">
+    <article class="span8">
+     
+    </article>
+</script>
+
+<script type="text/template" id="recent-activity">
+    <article class="span8">
+     
+    </article>
+</script>
+
+<script type="text/template" id="blog">
+<article class="span4">
+            <div class="blog-box">
+              <span>Our Blog</span>
+              <p>Aenean nonummy hendrerit mauris. Phasellus porta. Fusce suscipit varius mi. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla dui. Fusce feugiat malesuada odio. Morbi nunc odio, gravida at, cursus nec, luctus a, lorem. Maecenas tristique orci ac sem. Duis ultricies pharetra magna. Donec accumsan malesuada orci. Donec sit amet eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </p>
+              <a href="#" class="btn-2">Read more</a>
+            </div>
+            <h2>Reviews Updates</h2>
+            <ul class="list-updates">
+              <li>
+                <p><span class="font14">Praesent vestibulum molestie lacus.</span> Aenean nonummy hendrerit mauris. Phasellus porta. Fusce suscipit varius mi. Cum sociis natoque penatibus.</p>
+              </li>
+             <li>
+                <p><span class="font14">Lorem ipsum dolor sit amet,</span> consectetuer adipiscing elit. Praesent vestibulum molestie lacus. Donec sagittis euismod purus. Aenean nonummy hendrerit mauris. </p>
+              </li>
+              <li>
+                <p><span class="font14">Fusce euismod consequat ante. </span> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Pellentesque sed dolor. Aliquam congue fermentum nisl. </p>
+              </li>
+            </ul>
+            <a href="#" class="link">See all</a>
+    </article>
+</script>
+
+<script type="text/template" id="main-content">
+
+</script>
 <script type="text/template" id="home-template">
 
 <!--==============================header=================================-->
@@ -112,105 +262,10 @@
   <div class="container"> 
         
         <div class="row">
-          <article class="span8">
-            <h2>Reviews</h2>
-            <form id="form-2">
-                <fieldset class="d-block">
-                    <div class="box-1">
-                        <select name="select1">
-                            <option value="opt1">All Platforms</option>
-                            <option value="opt2">All Platforms</option>
-                        </select>
-                    </div>
-                    <div class="box-1">
-                        <select name="select1">
-                            <option value="opt1">All Games</option>
-                            <option value="opt2">All Games</option>
-                        </select>
-                    </div>
-                    <a href="#" class="btn btn-2"  onClick="document.getElementById('form-2').submit()">Find Now</a><br>
-                    <a href="#" class="link-form">Browse All Games »</a>
-                </fieldset>
-            </form>
-            <ul class="list-reviews">
-              <li>
-                <figure class="img-polaroid"><img src="img/page-2-img.jpg" alt=""></figure>
-                <div class="div-score">
-                  Our score
-                  <span>4.5</span>
-                  Poor
-                </div>
-                <div class="extra-wrap">
-                  <span class="font14 col14">Proin dictum</span>
-                  <p>Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatu... <a href="#">full review</a></p>
-                </div>
-                
-              </li>
-
-              <li>
-                <figure class="img-polaroid"><img src="img/page-2-img-1.jpg" alt=""></figure>
-                <div class="div-score">
-                  Our score
-                  <span>7.0</span>
-                  Poor
-                </div>
-                <div class="extra-wrap">
-                  <span class="font14 col14">Vestibulum iaculis</span>
-                  <p>Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatu... <a href="#">full review</a></p>
-                </div>
-                
-              </li>
-
-              <li>
-                <figure class="img-polaroid"><img src="img/page-2-img-2.jpg" alt=""></figure>
-                <div class="div-score">
-                  Our score
-                  <span>5.2</span>
-                  Poor
-                </div>
-                <div class="extra-wrap">
-                  <span class="font14 col14">Pellentesque </span>
-                  <p>Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatu... <a href="#">full review</a></p>
-                </div>
-                
-              </li>
-
-              <li>
-                <figure class="img-polaroid"><img src="img/page-2-img-3.jpg" alt=""></figure>
-                <div class="div-score">
-                  Our score
-                  <span>6.5</span>
-                  Poor
-                </div>
-                <div class="extra-wrap">
-                  <span class="font14 col14">Auctor ut ligula </span>
-                  <p>Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatu... <a href="#">full review</a></p>
-                </div>
-                
-              </li>
-            </ul>
-          </article>
-          <article class="span4">
-            <div class="blog-box">
-              <span>Our Blog</span>
-              <p>Aenean nonummy hendrerit mauris. Phasellus porta. Fusce suscipit varius mi. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla dui. Fusce feugiat malesuada odio. Morbi nunc odio, gravida at, cursus nec, luctus a, lorem. Maecenas tristique orci ac sem. Duis ultricies pharetra magna. Donec accumsan malesuada orci. Donec sit amet eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </p>
-              <a href="#" class="btn-2">Read more</a>
-            </div>
-            <h2>Reviews Updates</h2>
-            <ul class="list-updates">
-              <li>
-                <p><span class="font14">Praesent vestibulum molestie lacus.</span> Aenean nonummy hendrerit mauris. Phasellus porta. Fusce suscipit varius mi. Cum sociis natoque penatibus.</p>
-              </li>
-             <li>
-                <p><span class="font14">Lorem ipsum dolor sit amet,</span> consectetuer adipiscing elit. Praesent vestibulum molestie lacus. Donec sagittis euismod purus. Aenean nonummy hendrerit mauris. </p>
-              </li>
-              <li>
-                <p><span class="font14">Fusce euismod consequat ante. </span> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Pellentesque sed dolor. Aliquam congue fermentum nisl. </p>
-              </li>
-            </ul>
-            <a href="#" class="link">See all</a>
-          </article>
-
+          <div id="main-content"> <!-- where the search results or product page gets displayed -->
+          </div>
+          <div id="blog">  <!-- blog template -->
+          </div>
           
         </div>
 
