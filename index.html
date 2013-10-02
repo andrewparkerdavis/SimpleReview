@@ -214,9 +214,76 @@
     </article>
 </script>
 
-<script type="text/template" id="main-content">
+<script type="text/template" id="add-business">
+  <article class="span12">
+    <h2>Add Business</h2>
+    <form id="add-business-form">
+      <div class="success" style="display: none;">
+        Business added!
+      </div>
+      <fieldset>
+        <div>
+          <div>
+            <div class="txt-form">Product or Service Reviewed*</div>
+              <label class="name">
+                <input type="text" name="name" id="name" />
+                <br>
+                <span class="error" style="display: none;">*This is not a valid name.</span>
+                <span class="empty" style="display: none;">*This field is required.</span>
+            </label>
+          </div>
+          <div>
+            <div class="txt-form">Website*</div>
+              <label class="website">
+                <input type="text" name="website" id="website" />
+                <br>
+                <span class="error" style="display: none;">*This is not a valid url.</span>
+                <span class="empty" style="display: none;">*This field is required.</span>
+            </label>
+          </div>
+        </div>
+          <div>
+            <div class="txt-form">Category</div>
+              <label class="service">
+                TODO
+                <br>
+                <span class="error" style="display: none;">*This is not a valid url.</span>
+                <span class="empty" style="display: none;">*This field is required.</span>
+            </label>
+          </div>
+          <div>
+            <div class="txt-form">Category</div>
+              <label class="service">
+                TODO
+                <br>
+                <span class="error" style="display: none;">*This is not a valid url.</span>
+                <span class="empty" style="display: none;">*This field is required.</span>
+            </label>
+          </div>
+          <div id="add-rating">
+            <input type="checkbox" id="add-rating-checkbox" />
+            <div class="txt-form">Add a Review for this business?</div>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </article>
 
 </script>
+
+<script type="text/template" id="rating-box">
+</script>
+
+<script type="text/template" id="add-rating-template">
+  <div class="blog-box">
+    <h2>Rate and Review Product</h2>
+    <div id="overall-rating">Overall</div>
+    <div id="price-rating">Price</div>
+    <div id="reliability-rating">Reliability</div>
+    <div id="support-rating">Support</div>
+  </div>
+</script>
+
 <script type="text/template" id="home-template">
 
 <!--==============================header=================================-->
@@ -235,7 +302,7 @@
                     </div>
                     
                   </div>
-                	<div class="nav-collapse nav-collapse_ collapse">
+                	<div id="nav-bar" class="nav-collapse nav-collapse_ collapse">
                 	    <ul class="nav sf-menu clearfix">
                 	      <li><a href="index.html">Home</a></li>
                 	      <li class="sub-menu"><a href="index-1.html">Games</a>
