@@ -16,7 +16,17 @@ $(function() {
   // The Application
   // ---------------
 
- 
+  /* Models */
+  var Category = Parse.Object.extend("Categories");
+  var Rating = Parse.Object.extend("Ratings");
+
+
+  /* Collections */
+  var CategoryList = Parse.Collection.extend( {
+    model: Category
+  });
+
+
 
   /* Main Page */
 
@@ -234,6 +244,113 @@ var SearchNavView = Parse.View.extend ({
 
   });
 
+/* Category Dropdown */
+
+
+  var CategoryView = Parse.View.extend({
+      tagName: "option",
+      
+      initialize: function(){
+          _.bindAll(this, 'render');
+      },       
+      render: function(){
+          $(this.el).attr('value', this.model.id).html(this.model.get('name'));
+          return this;
+      }
+  });
+  
+ var CategoriesView = Parse.View.extend({
+      events: {
+          "change": "changeSelected"
+      },
+      
+      initialize: function(){
+          _.bindAll(this, 'addOne', 'addAll');
+
+
+          this.categories = new Categories();
+
+          this.categories.bind('add',     this.addOne);
+          this.categories.bind('reset',   this.addAll);
+          this.categories.bind('all',     this.render);
+
+          var query = new Parse.Query(Category);
+          if(this.parentId) {
+              var parent = new Category();
+              parent.id = this.parentId;
+              query.equalTo("Parent", parent);
+          } else {
+              query.doesNotExist("Parent");
+          }
+          query.ascending("name");
+          this.categories.query = query;
+          this.categories.fetch();
+      },
+      addOne: function(category){
+          var categoryView = new CategoryView({ model: category });
+          this.categoryViews.push(categoryView);
+          $(this.el).append(categoryView.render().el);
+      },        
+      addAll: function(){
+          _.each(this.categoryViews, function(categoryView) { categoryView.remove(); });
+          this.categoryViews = [];
+          this.categories.each(this.addOne);
+          if (this.selectedId) {
+              $(this.el).val(this.selectedId);
+          }
+      },
+      changeSelected: function(){
+          this.setSelectedId($(this.el).val());
+      },
+      setDisabled: function(disabled) {
+          $(this.el).attr('disabled', disabled);
+      },
+      setParentId: function(objectId) {
+          this.parentId = objectId;
+          if(!this.parentId && !this.topLevel) {
+              this.setDisabled(true);
+          } else if(!this.topLevel) {
+              var parent = new Category();
+              parent.id = this.parentId;
+              this.categories.query.equalTo("Parent", parent);
+              this.categories.fetch( {
+                  success: function(objects) {
+                      console.log("HELLO");
+                  }
+              });
+              if(this.childView.childView) {
+                  this.childView.childView.categories.reset();
+                  this.childView.childView.setDisabled(true);
+              }
+              this.render();
+          }
+      },
+      setSelectedId: function(objectId) {
+          if(this.childView) {
+              this.childView.selectedId = null;
+              this.childView.setDisabled(false);
+              this.childView.setParentId(objectId);
+              if(this.childView.childView) {
+                  this.childView.childView.categories.reset();
+                  this.childView.childView.setDisabled();
+              }
+          }
+      }        
+  });
+    
+    
+  /* Usage
+    
+    var categories = new Categories();
+    var subCategories = new Categories();
+    var subSubCategories = new Categories();
+    var topView = new CategoriesView({ el: $("#topCategories"), collection: categories, topLevel: true});
+    var secondView = new CategoriesView({ el: $("#subCategories"), collection: subCategories});
+    var thirdView = new CategoriesView({ el: $("#subSubCategories"), collection: subSubCategories});
+    topView.childView = secondView;
+    secondView.childView = thirdView;
+
+  */
 
 /* App and Routers */
 
