@@ -27,10 +27,31 @@ $(function() {
   });
 
 
+  /* Home Content View */
+ var HomeContentView = Parse.View.extend( {
+  el: "#main-content",
+
+  initialize: function() {
+    var self = this;
+    self.render();
+  },
+
+    render: function() {
+      this.$el.html(_.template($("#home-content-template").html()));
+      if (!Parse.User.current()) {
+        new CallToActionView();
+      }
+      new BestOfView();
+      new BlogView();
+      new AddBusinessPromptView();
+    }
+
+ });
+
 
   /* Main Page */
 
-  var HomeView = Parse.View.extend({
+  var MainView = Parse.View.extend({
     el: ".content",
 
    events: {
@@ -61,13 +82,16 @@ $(function() {
     },
 
     render: function() {
-      this.$el.html(_.template($("#home-template").html())); 
+      this.$el.html(_.template($("#main-template").html())); 
       new SearchNavView();
       if (Parse.User.current()) {
         new LoggedInNavView();
       } else {
         new NotLoggedInNavView();
-      }     
+      }
+      // TODO: if we're on home page?
+      new HomeContentView();
+
     },
     remove: function() {
       // Empty the element and remove it from the DOM while preserving events
@@ -85,8 +109,84 @@ $(function() {
 
   });
 
+ /* Call To Action */
+ var CallToActionView = Parse.View.extend( {
+  el: "#call-to-action",
 
+  initialize: function() {
+    var self = this;
+    self.render();
+  },
+
+    render: function() {
+      this.$el.html(_.template($("#call-to-action-template").html()));
+    }
+
+ });
  
+
+ /* Best of Per Category */
+
+ var BestOfView = Parse.View.extend( {
+  el: "#best-of-per-category",
+
+  initialize: function() {
+    var self = this;
+    self.render();
+  },
+
+    render: function() {
+      this.$el.html(_.template($("#best-of-per-category-template").html()));
+    }
+
+ });
+
+ var BlogView = Parse.View.extend( {
+  el: "#blog",
+
+  initialize: function() {
+    var self = this;
+    self.render();
+  },
+
+    render: function() {
+      this.$el.html(_.template($("#blog-template").html()));
+    }
+
+ });
+
+ var AddBusinessPromptView = Parse.View.extend({
+  events: {
+    "click a.btn2": "addBusinessForm"
+  },
+
+  el: "#add-business-prompt",
+  
+  initialize: function() {
+    _.bindAll(this, "addBusinessForm");
+    this.render();
+  },
+
+  addBusinessForm: function(e) {
+    var self = this;
+    //self.remove();
+    //TODO: trigger main view to display add business form
+
+    return false;
+  },
+
+  remove: function() {
+    // Empty the element and remove it from the DOM while preserving events
+    $(this.el).empty().detach();
+
+    return this;
+  },
+
+  render: function() {
+    this.$el.html(_.template($("#add-business-prompt-template").html()));
+    this.delegateEvents();
+  }
+}); 
  /* Login and Signup */
 
   var NotLoggedInNavView = Parse.View.extend ({
@@ -137,7 +237,7 @@ $(function() {
       
       Parse.User.logIn(username, password, {
         success: function(user) {
-          new HomeView();
+          new MainView();
           self.undelegateEvents();
           delete self;
 
@@ -188,7 +288,7 @@ var SignUpView = Parse.View.extend({
       
       Parse.User.signUp(username, password, { ACL: new Parse.ACL() }, {
         success: function(user) {
-         new HomeView();
+         new MainView();
           self.undelegateEvents();
           delete self;
       },
@@ -371,7 +471,7 @@ var SearchNavView = Parse.View.extend ({
     },
 
     render: function() {
-      new HomeView();
+      new MainView();
     }
   });
   
