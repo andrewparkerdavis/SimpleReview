@@ -36,16 +36,68 @@ $(function() {
     self.render();
   },
 
-    render: function() {
-      this.$el.html(_.template($("#home-content-template").html()));
-      if (!Parse.User.current()) {
-        new CallToActionView();
-      }
-      new BestOfView();
-      new BlogView();
-      new AddBusinessPromptView();
-    }
+  render: function() {
+    this.$el.html(_.template($("#home-content-template").html()));
+    new CallToActionView();
+    new BestOfView();
+    new BlogView();
+    new AddBusinessPromptView();
+  }
 
+ });
+
+ var LoggedInContentView = Parse.View.extend( {
+  el: "#main-content",
+
+  initialize: function() {
+    var self = this;
+    self.render();
+  },
+
+  render: function() {
+    this.$el.html(_.template($("#logged-in-content-template").html()));
+
+    new BestOfView();
+    new AddBusinessPromptView();
+    new BlogView();
+  }
+
+ });
+
+ var BusinessFormContentView = Parse.View.extend( {
+  el: "#main-content",
+
+  initialize: function() {
+    var self = this;
+    self.render();
+  },
+
+  render: function() {
+    this.$el.html(_.template($("#add-business-form-content-template").html()));
+    new BusinessFormComponent();
+    new BlogView();
+  }
+
+});
+
+ var BusinessFormComponent = Parse.View.extend( {
+    el: "#add-business-component",
+
+    initialize: function() {
+      var self = this;
+      self.render();
+    },
+    render: function() {
+      this.$el.html(_.template($("#add-business-template").html()));
+        var categories = new CategoryList();
+        var subCategories = new CategoryList();
+        var subSubCategories = new CategoryList();
+        this.topView = new CategoriesView({ el: $("#topCategories"), collection: categories, topLevel: true});
+        this.secondView = new CategoriesView({ el: $("#subCategories"), collection: subCategories});
+        this.thirdView = new CategoriesView({ el: $("#subSubCategories"), collection: subSubCategories});
+        this.topView.childView = this.secondView;
+        this.secondView.childView = this.thirdView;      
+    }
  });
 
 
@@ -57,7 +109,8 @@ $(function() {
    events: {
       "click .log-out": "logOut",
       "click .login-link": "displayLogin",
-      "click .signup-link": "displaySignup"
+      "click .signup-link": "displaySignup",
+      "click #add-business-button" : "displayAddBusinessForm"
     },
 
  
@@ -81,17 +134,26 @@ $(function() {
       delete this;
     },
 
+    displayAddBusinessForm: function(e) {
+      if (Parse.User.current()) {
+        //this.contentView.remove();
+        this.contentView = new BusinessFormContentView();
+      } else {
+        this.displaySignup(e);
+      }
+
+    },
+
     render: function() {
       this.$el.html(_.template($("#main-template").html())); 
       new SearchNavView();
       if (Parse.User.current()) {
         new LoggedInNavView();
+        this.contentView = new LoggedInContentView();
       } else {
         new NotLoggedInNavView();
-      }
-      // TODO: if we're on home page?
-      new HomeContentView();
-
+        this.contentView = new HomeContentView();
+       }
     },
     remove: function() {
       // Empty the element and remove it from the DOM while preserving events
@@ -156,24 +218,13 @@ $(function() {
  });
 
  var AddBusinessPromptView = Parse.View.extend({
-  events: {
-    "click a.btn2": "addBusinessForm"
-  },
 
   el: "#add-business-prompt",
   
   initialize: function() {
-    _.bindAll(this, "addBusinessForm");
     this.render();
   },
 
-  addBusinessForm: function(e) {
-    var self = this;
-    //self.remove();
-    //TODO: trigger main view to display add business form
-
-    return false;
-  },
 
   remove: function() {
     // Empty the element and remove it from the DOM while preserving events
@@ -220,7 +271,8 @@ $(function() {
 
    var LogInView = Parse.View.extend({
     events: {
-      "submit form.login-form": "logIn"
+      "submit form.login-form": "logIn",
+      "click #signup-from-login": "displaySignup"
     },
 
     el: ".content",
@@ -264,12 +316,18 @@ $(function() {
     render: function() {
       this.$el.html(_.template($("#login-template").html()));
       this.delegateEvents();
-    }
+    },
+    displaySignup: function(e) {
+      new SignUpView();
+      this.undelegateEvents();
+      delete this;
+    }    
   });
 
 var SignUpView = Parse.View.extend({
     events: {
-      "submit form.signup-form": "signUp"
+      "submit form.signup-form": "signUp",
+      "click #login-from-signup-button": "displayLogin"
     },
 
     el: ".content",
@@ -313,7 +371,13 @@ var SignUpView = Parse.View.extend({
     render: function() {
       this.$el.html(_.template($("#signup-template").html()));
       this.delegateEvents();
-    }
+    },
+   displayLogin: function(e) {
+      new LogInView();
+      this.undelegateEvents();
+      delete this;
+    },
+
   });
 
 /* End login and signup */
@@ -368,23 +432,25 @@ var SearchNavView = Parse.View.extend ({
           _.bindAll(this, 'addOne', 'addAll');
 
 
-          this.categories = new Categories();
+          this.collection = new CategoryList();
 
-          this.categories.bind('add',     this.addOne);
-          this.categories.bind('reset',   this.addAll);
-          this.categories.bind('all',     this.render);
-
-          var query = new Parse.Query(Category);
-          if(this.parentId) {
-              var parent = new Category();
-              parent.id = this.parentId;
-              query.equalTo("Parent", parent);
-          } else {
-              query.doesNotExist("Parent");
+          this.collection.bind('add',     this.addOne);
+          this.collection.bind('reset',   this.addAll);
+          this.collection.bind('all',     this.render);
+          
+          if(!$(this.el).attr('disabled')) {
+            var query = new Parse.Query(Category);
+            if(this.parentId) {
+                var parent = new Category();
+                parent.id = this.parentId;
+                query.equalTo("Parent", parent);
+            } else {
+                query.doesNotExist("Parent");
+            }
+            query.ascending("name");
+            this.collection.query = query;
+            this.collection.fetch();
           }
-          query.ascending("name");
-          this.categories.query = query;
-          this.categories.fetch();
       },
       addOne: function(category){
           var categoryView = new CategoryView({ model: category });
@@ -394,7 +460,7 @@ var SearchNavView = Parse.View.extend ({
       addAll: function(){
           _.each(this.categoryViews, function(categoryView) { categoryView.remove(); });
           this.categoryViews = [];
-          this.categories.each(this.addOne);
+          this.collection.each(this.addOne);
           if (this.selectedId) {
               $(this.el).val(this.selectedId);
           }
@@ -410,16 +476,15 @@ var SearchNavView = Parse.View.extend ({
           if(!this.parentId && !this.topLevel) {
               this.setDisabled(true);
           } else if(!this.topLevel) {
+              if(!this.collection.query)
+                  this.collection.query = new Parse.Query(Category);
               var parent = new Category();
               parent.id = this.parentId;
-              this.categories.query.equalTo("Parent", parent);
-              this.categories.fetch( {
-                  success: function(objects) {
-                      console.log("HELLO");
-                  }
-              });
+              this.collection.query.equalTo("Parent", parent);
+              this.collection.query.ascending("name");
+              this.collection.fetch( );
               if(this.childView.childView) {
-                  this.childView.childView.categories.reset();
+                  this.childView.childView.collection.reset();
                   this.childView.childView.setDisabled(true);
               }
               this.render();
@@ -428,11 +493,11 @@ var SearchNavView = Parse.View.extend ({
       setSelectedId: function(objectId) {
           if(this.childView) {
               this.childView.selectedId = null;
-              this.childView.setDisabled(false);
               this.childView.setParentId(objectId);
+              this.childView.setDisabled(false);
               if(this.childView.childView) {
-                  this.childView.childView.categories.reset();
-                  this.childView.childView.setDisabled();
+                  this.childView.childView.collection.reset();
+                  this.childView.childView.setDisabled(true);
               }
           }
       }        
