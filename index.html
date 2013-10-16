@@ -84,15 +84,21 @@
       <div class="container"> 
             
             <div class="row">
-              <div class="login">
-                <form class="login-form">
-                  <h2>Log In</h2>
-                  <div class="error" style="display:none"></div>
-                  <input type="text" id="login-username" placeholder="Username" />
-                  <input type="password" id="login-password" placeholder="Password" />
-                  <button>Log In</button>
-                </form>    
-              </div>        
+                <article class="span8">
+                  <div class="login">
+                    <form class="login-form">
+                      <h2>Log In</h2>
+                      <div class="error" style="display:none"></div>
+                      <input type="text" id="login-username" placeholder="Username" />
+                      <input type="password" id="login-password" placeholder="Password" />
+                      <button>Log In</button>
+                    </form>
+                  </div>
+                </article>
+              <article class="span4">
+                <h2>No Account Yet?</h2>
+                <a href="#" id="signup-from-login" class="btn-2">Sign Up</a>
+              </article>
             </div>
 
 
@@ -137,18 +143,22 @@
       <div class="container"> 
             
             <div class="row">
-              <div class="login">
-               <form class="signup-form">
-                  <h2>Sign Up</h2>
-                  <div class="error" style="display:none"></div>
-                  <input type="text" id="signup-username" placeholder="Username" />
-                  <input type="password" id="signup-password" placeholder="Create a Password" />
-                  <button>Sign Up</button>
-                </form>
+               <article class="span8">
+                <div class="login">
+                 <form class="signup-form">
+                    <h2>Sign Up</h2>
+                    <div class="error" style="display:none"></div>
+                    <input type="text" id="signup-username" placeholder="Username" />
+                    <input type="password" id="signup-password" placeholder="Create a Password" />
+                    <button>Sign Up</button>
+                  </form>
+                </div>
+                </article>
+                <article class="span4">
+                  <h2>Already Have An Account?</h2>
+                  <a class="btn-2" id="login-from-signup-button">Log In</a>
+                </article>
               </div>        
-            </div>
-
-
       </div>
     </div>
     <footer>
@@ -337,7 +347,7 @@
     <div class="blog-box">
       <span>Add a ßusiness!</span>
       <p>Flavor Flav says add a business! </p>
-      <a href="#" class="btn-2">Yeahhhhhh Boyyyyy!</a>
+      <a href="#" class="btn-2" id="add-business-button">Yeahhhhhh Boyyyyy!</a>
     </div>
   </span>
 </script>
@@ -372,7 +382,7 @@
 </script>
 
 <script type="text/template" id="add-business-template">
-  <article class="span12">
+  <article class="span8">
     <h2>Add Business</h2>
     <form id="add-business-form">
       <div class="success" style="display: none;">
@@ -389,6 +399,13 @@
                 <span class="empty" style="display: none;">*This field is required.</span>
             </label>
           </div>
+          <div>
+            <div class="txt-form">Product Categories*</div>
+            <select id="topCategories"><option>Select One</option></select>
+            <select id="subCategories" disabled="true"><option>Select One</option></select>
+            <select id="subSubCategories" disabled="true"><option>Select One</option></select>
+          </div>
+          
           <div>
             <div class="txt-form">Website*</div>
               <label class="website">
@@ -449,6 +466,18 @@
   </div>
 </script>
 
+<script type="text/template" id="logged-in-content-template">
+  <div id="best-of-per-category"></div>
+  <div id="add-business-prompt"></div>       
+  <div id="blog">  <!-- blog template -->
+  </div>
+</script>
+
+<script type="text/template" id="add-business-form-content-template">
+  <div id="add-business-component"></div>       
+  <div id="blog">  <!-- blog template -->
+  </div>
+</script>
 <script type="text/template" id="main-template">
 
 <!--==============================header=================================-->
