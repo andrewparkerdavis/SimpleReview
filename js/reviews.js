@@ -22,7 +22,7 @@ $(function() {
 
 
   /* Collections */
-  var CategoryList = Parse.Collection.extend( {
+  var Categories = Parse.Collection.extend( {
     model: Category
   });
 
@@ -89,14 +89,14 @@ $(function() {
     },
     render: function() {
       this.$el.html(_.template($("#add-business-template").html()));
-        var categories = new CategoryList();
-        var subCategories = new CategoryList();
-        var subSubCategories = new CategoryList();
-        this.topView = new CategoriesView({ el: $("#topCategories"), collection: categories, topLevel: true});
-        this.secondView = new CategoriesView({ el: $("#subCategories"), collection: subCategories});
-        this.thirdView = new CategoriesView({ el: $("#subSubCategories"), collection: subSubCategories});
-        this.topView.childView = this.secondView;
-        this.secondView.childView = this.thirdView;      
+      var categories = new Categories();
+      var subCategories = new Categories();
+      var subSubCategories = new Categories();
+      var topView = new CategoriesView({ el: $("#topCategories"), collection: categories, topLevel: true});
+      var secondView = new CategoriesView({ el: $("#subCategories"), collection: subCategories});
+      var thirdView = new CategoriesView({ el: $("#subSubCategories"), collection: subSubCategories});
+      topView.childView = secondView;
+      secondView.childView = thirdView;     
     }
  });
 
@@ -411,34 +411,39 @@ var SearchNavView = Parse.View.extend ({
 /* Category Dropdown */
 
 
-  var CategoryView = Parse.View.extend({
-      tagName: "option",
-      
-      initialize: function(){
-          _.bindAll(this, 'render');
-      },       
-      render: function(){
-          $(this.el).attr('value', this.model.id).html(this.model.get('name'));
-          return this;
-      }
-  });
-  
- var CategoriesView = Parse.View.extend({
-      events: {
-          "change": "changeSelected"
-      },
-      
-      initialize: function(){
-          _.bindAll(this, 'addOne', 'addAll');
+    var Category = Parse.Object.extend("Categories");
+    var Categories = Parse.Collection.extend({
+        model: Category
+    });
 
 
-          this.collection = new CategoryList();
+    var CategoryView = Parse.View.extend({
+        tagName: "option",
+        
+        initialize: function(){
+            _.bindAll(this, 'render');
+        },       
+        render: function(){
+            $(this.el).attr('value', this.model.id).html(this.model.get('name'));
+            return this;
+        }
+    });
+    
+   var CategoriesView = Parse.View.extend({
+        events: {
+            "change": "changeSelected"
+        },
+        
+        initialize: function(){
+            _.bindAll(this, 'addOne', 'addAll');
 
-          this.collection.bind('add',     this.addOne);
-          this.collection.bind('reset',   this.addAll);
-          this.collection.bind('all',     this.render);
-          
-          if(!$(this.el).attr('disabled')) {
+
+            this.categories = new Categories();
+
+            this.categories.bind('add',     this.addOne);
+            this.categories.bind('reset',   this.addAll);
+            this.categories.bind('all',     this.render);
+
             var query = new Parse.Query(Category);
             if(this.parentId) {
                 var parent = new Category();
@@ -448,74 +453,62 @@ var SearchNavView = Parse.View.extend ({
                 query.doesNotExist("Parent");
             }
             query.ascending("name");
-            this.collection.query = query;
-            this.collection.fetch();
-          }
-      },
-      addOne: function(category){
-          var categoryView = new CategoryView({ model: category });
-          this.categoryViews.push(categoryView);
-          $(this.el).append(categoryView.render().el);
-      },        
-      addAll: function(){
-          _.each(this.categoryViews, function(categoryView) { categoryView.remove(); });
-          this.categoryViews = [];
-          this.collection.each(this.addOne);
-          if (this.selectedId) {
-              $(this.el).val(this.selectedId);
-          }
-      },
-      changeSelected: function(){
-          this.setSelectedId($(this.el).val());
-      },
-      setDisabled: function(disabled) {
-          $(this.el).attr('disabled', disabled);
-      },
-      setParentId: function(objectId) {
-          this.parentId = objectId;
-          if(!this.parentId && !this.topLevel) {
-              this.setDisabled(true);
-          } else if(!this.topLevel) {
-              if(!this.collection.query)
-                  this.collection.query = new Parse.Query(Category);
-              var parent = new Category();
-              parent.id = this.parentId;
-              this.collection.query.equalTo("Parent", parent);
-              this.collection.query.ascending("name");
-              this.collection.fetch( );
-              if(this.childView.childView) {
-                  this.childView.childView.collection.reset();
-                  this.childView.childView.setDisabled(true);
-              }
-              this.render();
-          }
-      },
-      setSelectedId: function(objectId) {
-          if(this.childView) {
-              this.childView.selectedId = null;
-              this.childView.setParentId(objectId);
-              this.childView.setDisabled(false);
-              if(this.childView.childView) {
-                  this.childView.childView.collection.reset();
-                  this.childView.childView.setDisabled(true);
-              }
-          }
-      }        
-  });
+            this.categories.query = query;
+            this.categories.fetch();
+        },
+        addOne: function(category){
+            var categoryView = new CategoryView({ model: category });
+            this.categoryViews.push(categoryView);
+            $(this.el).append(categoryView.render().el);
+        },        
+        addAll: function(){
+            _.each(this.categoryViews, function(categoryView) { categoryView.remove(); });
+            this.categoryViews = [];
+            this.categories.each(this.addOne);
+            if (this.selectedId) {
+                $(this.el).val(this.selectedId);
+            }
+        },
+        changeSelected: function(){
+            this.setSelectedId($(this.el).val());
+        },
+        setDisabled: function(disabled) {
+            $(this.el).attr('disabled', disabled);
+        },
+        setParentId: function(objectId) {
+            this.parentId = objectId;
+            if(!this.parentId && !this.topLevel) {
+                this.setDisabled(true);
+            } else if(!this.topLevel) {
+                var parent = new Category();
+                parent.id = this.parentId;
+                this.categories.query.equalTo("Parent", parent);
+                this.categories.fetch( {
+                    success: function(objects) {
+                        console.log("HELLO");
+                    }
+                });
+                if(this.childView.childView) {
+                    this.childView.childView.categories.reset();
+                    this.childView.childView.setDisabled(true);
+                }
+                this.render();
+            }
+        },
+        setSelectedId: function(objectId) {
+            if(this.childView) {
+                this.childView.selectedId = null;
+                this.childView.setDisabled(false);
+                this.childView.setParentId(objectId);
+                if(this.childView.childView) {
+                    this.childView.childView.categories.reset();
+                    this.childView.childView.setDisabled();
+                }
+            }
+        }        
+    });
     
-    
-  /* Usage
-    
-    var categories = new Categories();
-    var subCategories = new Categories();
-    var subSubCategories = new Categories();
-    var topView = new CategoriesView({ el: $("#topCategories"), collection: categories, topLevel: true});
-    var secondView = new CategoriesView({ el: $("#subCategories"), collection: subCategories});
-    var thirdView = new CategoriesView({ el: $("#subSubCategories"), collection: subSubCategories});
-    topView.childView = secondView;
-    secondView.childView = thirdView;
-
-  */
+ 
 
 /* App and Routers */
 
