@@ -19,14 +19,19 @@ $(function() {
   /* Models */
   var Category = Parse.Object.extend("Categories");
   var Rating = Parse.Object.extend("Ratings");
-
+  var Product = Parse.Object.extend("Products");
 
   /* Collections */
   var Categories = Parse.Collection.extend( {
     model: Category
   });
+  
+  var Products = Parse.Collection.extend( {
+      model: Product
+  });
 
-
+ var allProducts = new Products();
+ 
   /* Home Content View */
  var HomeContentView = Parse.View.extend( {
   el: "#main-content",
@@ -69,6 +74,7 @@ $(function() {
 
   initialize: function() {
     var self = this;
+    this.ratingsViewActive = false;
     self.render();
   },
 
@@ -82,9 +88,13 @@ $(function() {
 
  var BusinessFormComponent = Parse.View.extend( {
     el: "#add-business-component",
-
+    events: {
+      "click .add-rating-checkbox": "displayAddRatingForm",
+      "submit": "createBusiness"
+    },
     initialize: function() {
       var self = this;
+      _.bindAll(this, 'displayAddRatingForm', 'createBusiness');
       self.render();
     },
     render: function() {
@@ -96,8 +106,50 @@ $(function() {
       var secondView = new CategoriesView({ el: $("#subCategories"), collection: subCategories});
       var thirdView = new CategoriesView({ el: $("#subSubCategories"), collection: subSubCategories});
       topView.childView = secondView;
-      secondView.childView = thirdView;     
-    }
+      secondView.childView = thirdView;
+    },
+    displayAddRatingForm: function(e) {
+        if(this.ratingsViewActive) {
+            this.addRatingView.remove();
+//            this.addRatingView.unbind();
+            this.ratingsViewActive = false;
+//            this.addRatingView = null;
+//            Backbone.View.prototype.remove.call(this.addRatingView);            
+//            console.log(this.addRatingView);
+        } else {
+            this.addRatingView = new AddRatingView( { el: $("#rating-form") });
+            this.ratingsViewActive = true;
+        }
+    },
+  createBusiness: function(e) {
+      var self = this;
+//      if (e.keyCode != 13) return;
+
+      var product = new Product();
+      product.set("name", $('#name').val());
+      product.set("url", $('#url').val());
+      product.set("createUser", Parse.User.current());
+      product.ACL = new Parse.ACL(Parse.User.current());
+      var categories = product.relation("Categories");
+      var category = new Category();
+      category.id = $("#subSubCategories").val();
+      categories.add(category);
+      
+      product.save();
+      allProducts.add(product);
+    }    
+ });
+ 
+ var AddRatingView = Parse.View.extend( {
+  initialize: function() {
+    var self = this;
+    self.render();
+  },
+
+  render: function() {
+    this.$el.html(_.template($("#add-rating-template").html()));
+  }
+     
  });
 
 
@@ -411,110 +463,109 @@ var SearchNavView = Parse.View.extend ({
 /* Category Dropdown */
 
 
-    var Category = Parse.Object.extend("Categories");
-    var Categories = Parse.Collection.extend({
-        model: Category
-    });
+  var Category = Parse.Object.extend("Categories");
+  var Categories = Parse.Collection.extend({
+      model: Category
+  });
 
 
-    var CategoryView = Parse.View.extend({
-        tagName: "option",
-        
-        initialize: function(){
-            _.bindAll(this, 'render');
-        },       
-        render: function(){
-            $(this.el).attr('value', this.model.id).html(this.model.get('name'));
-            return this;
-        }
-    });
-    
-   var CategoriesView = Parse.View.extend({
-        events: {
-            "change": "changeSelected"
-        },
-        
-        initialize: function(){
-            _.bindAll(this, 'addOne', 'addAll');
+  var CategoryView = Parse.View.extend({
+      tagName: "option",
+      
+      initialize: function(){
+          _.bindAll(this, 'render');
+      },       
+      render: function(){
+          $(this.el).attr('value', this.model.id).html(this.model.get('name'));
+          return this;
+      }
+  });
+  
+ var CategoriesView = Parse.View.extend({
+      events: {
+          "change": "changeSelected"
+      },
+      
+      initialize: function(){
+          _.bindAll(this, 'addOne', 'addAll');
 
 
-            this.categories = new Categories();
+          this.categories = new Categories();
 
-            this.categories.bind('add',     this.addOne);
-            this.categories.bind('reset',   this.addAll);
-            this.categories.bind('all',     this.render);
+          this.categories.bind('add',     this.addOne);
+          this.categories.bind('reset',   this.addAll);
+          this.categories.bind('all',     this.render);
 
-            var query = new Parse.Query(Category);
-            if(this.parentId) {
-                var parent = new Category();
-                parent.id = this.parentId;
-                query.equalTo("Parent", parent);
-            } else {
-                query.doesNotExist("Parent");
-            }
-            query.ascending("name");
-            this.categories.query = query;
-            this.categories.fetch();
-        },
-        addOne: function(category){
-            var categoryView = new CategoryView({ model: category });
-            this.categoryViews.push(categoryView);
-            $(this.el).append(categoryView.render().el);
-        },        
-        addAll: function(){
-            _.each(this.categoryViews, function(categoryView) { categoryView.remove(); });
-            this.categoryViews = [];
-            this.categories.each(this.addOne);
-            if (this.selectedId) {
-                $(this.el).val(this.selectedId);
-            }
-        },
-        changeSelected: function(){
-            this.setSelectedId($(this.el).val());
-        },
-        setDisabled: function(disabled) {
-            $(this.el).attr('disabled', disabled);
-        },
-        setParentId: function(objectId) {
-            this.parentId = objectId;
-            if(!this.parentId && !this.topLevel) {
-                this.setDisabled(true);
-            } else if(!this.topLevel) {
-                var parent = new Category();
-                parent.id = this.parentId;
-                this.categories.query.equalTo("Parent", parent);
-                this.categories.fetch( {
-                    success: function(objects) {
-                        console.log("HELLO");
-                    }
-                });
-                if(this.childView.childView) {
-                    this.childView.childView.categories.reset();
-                    this.childView.childView.setDisabled(true);
-                }
-                this.render();
-            }
-        },
-        setSelectedId: function(objectId) {
-            if(this.childView) {
-                this.childView.selectedId = null;
-                this.childView.setDisabled(false);
-                this.childView.setParentId(objectId);
-                if(this.childView.childView) {
-                    this.childView.childView.categories.reset();
-                    this.childView.childView.setDisabled();
-                }
-            }
-        }        
-    });
-    
+          var query = new Parse.Query(Category);
+          if(this.parentId) {
+              var parent = new Category();
+              parent.id = this.parentId;
+              query.equalTo("Parent", parent);
+          } else {
+              query.doesNotExist("Parent");
+          }
+          query.ascending("name");
+          this.categories.query = query;
+          this.categories.fetch();
+      },
+      addOne: function(category){
+          var categoryView = new CategoryView({ model: category });
+          this.categoryViews.push(categoryView);
+          $(this.el).append(categoryView.render().el);
+      },        
+      addAll: function(){
+          _.each(this.categoryViews, function(categoryView) { categoryView.remove(); });
+          this.categoryViews = [];
+          this.categories.each(this.addOne);
+          if (this.selectedId) {
+              $(this.el).val(this.selectedId);
+          }
+      },
+      changeSelected: function(){
+          this.setSelectedId($(this.el).val());
+      },
+      setDisabled: function(disabled) {
+          $(this.el).attr('disabled', disabled);
+      },
+      setParentId: function(objectId) {
+          this.parentId = objectId;
+          if(!this.parentId && !this.topLevel) {
+              this.setDisabled(true);
+          } else if(!this.topLevel) {
+              var parent = new Category();
+              parent.id = this.parentId;
+              this.categories.query.equalTo("Parent", parent);
+              this.categories.fetch( {
+                  success: function(objects) {
+                      console.log("HELLO");
+                  }
+              });
+              if(typeof this.childView!== 'undefined' && typeof this.childView.childView !== 'undefined') {
+                  this.childView.childView.categories.reset();
+                  this.childView.childView.setDisabled(true);
+              }
+              this.render();
+          }
+      },
+      setSelectedId: function(objectId) {
+          if(this.childView) {
+              this.childView.selectedId = null;
+              this.childView.setDisabled(false);
+              this.childView.setParentId(objectId);
+              if(this.childView.childView) {
+                  this.childView.childView.categories.reset();
+                  this.childView.childView.setDisabled();
+              }
+          }
+      }        
+  });
+  
  
 
 /* App and Routers */
 
  var AppState = Parse.Object.extend("AppState", {
     defaults: {
-      filter: "all"
     }
   });
 
@@ -529,36 +580,28 @@ var SearchNavView = Parse.View.extend ({
     },
 
     render: function() {
-      new MainView();
+      this.mainView = new MainView();
     }
   });
   
   var AppRouter = Parse.Router.extend({
     routes: {
-      "all": "all",
-      "active": "active",
-      "completed": "completed"
+      "business/add": "addBusiness",
+      "#": "mainView"
     },
 
     initialize: function(options) {
     },
 
-    all: function() {
-      state.set({ filter: "all" });
-    },
-
-    active: function() {
-      state.set({ filter: "active" });
-    },
-
-    completed: function() {
-      state.set({ filter: "completed" });
+    addBusiness: function() {
+      view.mainView.displayAddBusinessForm();
     }
+
   });
 
   var state = new AppState;
 
-  new AppRouter;
-  new AppView;
+  var router = new AppRouter;
+  var view = new AppView;
   Parse.history.start();
 });
