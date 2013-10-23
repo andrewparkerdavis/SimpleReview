@@ -347,7 +347,7 @@
     <div class="blog-box">
       <span>Add a ßusiness!</span>
       <p>Flavor Flav says add a business! </p>
-      <a href="#" class="btn-2" id="add-business-button">Yeahhhhhh Boyyyyy!</a>
+      <a href="#/business/add" class="btn-2" id="add-business-button">Yeahhhhhh Boyyyyy!</a>
     </div>
   </span>
 </script>
@@ -416,12 +416,18 @@
             </label>
           </div>
         </div>
-          <div>
+        <div>
  
           <div id="add-rating">
-            <input type="checkbox" id="add-rating-checkbox" />
+            <input type="checkbox" class="add-rating-checkbox" />
             <div class="txt-form">Add a Review for this business?</div>
           </div>
+        </div>
+        <div>
+            <div id="rating-form"></div>
+        </div>
+        <div>
+            <input type="submit" name="submit" value="submit" class="btn-2"/>
         </div>
       </fieldset>
     </form>
@@ -439,6 +445,8 @@
     <div id="price-rating">Price</div>
     <div id="reliability-rating">Reliability</div>
     <div id="support-rating">Support</div>
+    <h3>Review</h3>
+    <textarea id="review"></textarea>
   </div>
 </script>
 
