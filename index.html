@@ -47,10 +47,10 @@
 <script type="text/template" id="not-logged-in-nav-template">
   <ul>
     <li>
-      <a class="signup-link" href="#">Sign Up</a>
+      <a class="signup-link" href="#/signup">Sign Up</a>
     </li>
     <li>
-      <a class="login-link" href="#">Log In</a>
+      <a class="login-link" href="#/login">Log In</a>
     </li>
   </ul>
 </script>
@@ -73,7 +73,7 @@
              <div class="navbar navbar_ clearfix">
                 <div class="navbar-inner">      
                       <div class="clearfix">
-                        <h1 class="brand"><a href="index.html"><img src="img/logo.png" alt=""></a><span>Games The biggest choice on the web</span></h1>
+                        <h1 class="brand"><a href="index.html#/home"><img src="img/logo.png" alt=""></a><span>Games The biggest choice on the web</span></h1>
                       </div>
                       
                  </div>  
@@ -97,7 +97,7 @@
                 </article>
               <article class="span4">
                 <h2>No Account Yet?</h2>
-                <a href="#" id="signup-from-login" class="btn-2">Sign Up</a>
+                <a href="#" class="btn-2">Sign Up</a>
               </article>
             </div>
 
@@ -132,7 +132,7 @@
              <div class="navbar navbar_ clearfix">
                 <div class="navbar-inner">      
                       <div class="clearfix">
-                        <h1 class="brand"><a href="index.html"><img src="img/logo.png" alt=""></a><span>Games The biggest choice on the web</span></h1>
+                        <h1 class="brand"><a href="index.html#/home"><img src="img/logo.png" alt=""></a><span>Games The biggest choice on the web</span></h1>
                       </div>
                       
                  </div>  
@@ -150,13 +150,13 @@
                     <div class="error" style="display:none"></div>
                     <input type="text" id="signup-username" placeholder="Username" />
                     <input type="password" id="signup-password" placeholder="Create a Password" />
-                    <button>Sign Up</button>
+                    <a class="btn-2" href="#/signup">Sign Up</a>
                   </form>
                 </div>
                 </article>
                 <article class="span4">
                   <h2>Already Have An Account?</h2>
-                  <a class="btn-2" id="login-from-signup-button">Log In</a>
+                  <a class="btn-2" href="#/login" id="login-from-signup-button">Log In</a>
                 </article>
               </div>        
       </div>
@@ -194,7 +194,7 @@
     <div class="blog-box">
       <span>Sign Up ßiatch!</span>
       <p>You best be signing up now, or Flavah Flav will get ya! </p>
-      <a href="#" class="btn-2">Read more</a>
+      <a href="#/signup" class="btn-2 signup-link">Read more</a>
     </div>
   </article>
 </script>
@@ -402,8 +402,8 @@
           <div>
             <div class="txt-form">Product Categories*</div>
             <select id="topCategories"><option>Select One</option></select>
-            <select id="subCategories" disabled="true"><option>Select One</option></select>
-            <select id="subSubCategories" disabled="true"><option>Select One</option></select>
+            <select id="subCategories" display="none"><option>Select One</option></select>
+            <select id="subSubCategories" display="none"><option>Select One</option></select>
           </div>
           
           <div>
@@ -478,7 +478,7 @@
          <div class="navbar navbar_ clearfix">
             <div class="navbar-inner">      
                   <div class="clearfix">
-                  	<h1 class="brand"><a href="index.html"><img src="img/logo.png" alt=""></a><span>Games The biggest choice on the web</span></h1>
+                  	<h1 class="brand"><a href="index.html#/home"><img src="img/logo.png" alt=""></a><span>Games The biggest choice on the web</span></h1>
 
                     <div class="div-search" id="nav-search"> <!-- // Matches to home-nav-search-template -->
               
