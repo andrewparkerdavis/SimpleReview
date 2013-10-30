@@ -104,7 +104,9 @@ $(function() {
       var subSubCategories = new Categories();
       var topView = new CategoriesView({ el: $("#topCategories"), collection: categories, topLevel: true});
       var secondView = new CategoriesView({ el: $("#subCategories"), collection: subCategories});
+      secondView.setHidden(true);
       var thirdView = new CategoriesView({ el: $("#subSubCategories"), collection: subSubCategories});
+      thirdView.setHidden(true);
       topView.childView = secondView;
       secondView.childView = thirdView;
     },
@@ -527,22 +529,35 @@ var SearchNavView = Parse.View.extend ({
       setDisabled: function(disabled) {
           $(this.el).attr('disabled', disabled);
       },
+      
+      setHidden: function(hidden) {
+          if(hidden) {
+            $(this.el).hide();
+        } else {
+            $(this.el).show();
+        }
+      },
       setParentId: function(objectId) {
+          var self = this;
           this.parentId = objectId;
           if(!this.parentId && !this.topLevel) {
-              this.setDisabled(true);
+              this.setHidden(true);
           } else if(!this.topLevel) {
               var parent = new Category();
               parent.id = this.parentId;
               this.categories.query.equalTo("Parent", parent);
               this.categories.fetch( {
                   success: function(objects) {
-                      console.log("HELLO");
+                      if(objects.length === 0) {
+                          self.setHidden(true);
+                      } else {
+                          self.setHidden(false);
+                      }
                   }
               });
               if(typeof this.childView!== 'undefined' && typeof this.childView.childView !== 'undefined') {
                   this.childView.childView.categories.reset();
-                  this.childView.childView.setDisabled(true);
+                  this.childView.childView.setHidden(true);
               }
               this.render();
           }
@@ -550,11 +565,11 @@ var SearchNavView = Parse.View.extend ({
       setSelectedId: function(objectId) {
           if(this.childView) {
               this.childView.selectedId = null;
-              this.childView.setDisabled(false);
+//              this.childView.setDisabled(false);
               this.childView.setParentId(objectId);
               if(this.childView.childView) {
                   this.childView.childView.categories.reset();
-                  this.childView.childView.setDisabled();
+                  this.childView.childView.setHidden(true);
               }
           }
       }        
@@ -587,7 +602,8 @@ var SearchNavView = Parse.View.extend ({
   var AppRouter = Parse.Router.extend({
     routes: {
       "business/add": "addBusiness",
-      "#": "mainView"
+      "#": "mainView",
+      "home": "mainView"
     },
 
     initialize: function(options) {
@@ -595,6 +611,11 @@ var SearchNavView = Parse.View.extend ({
 
     addBusiness: function() {
       view.mainView.displayAddBusinessForm();
+    },
+    
+    mainView: function() {
+        if(typeof view.mainView !== MainView)
+            view.mainView = new MainView();
     }
 
   });
