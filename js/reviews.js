@@ -1,7 +1,3 @@
-// An example Parse.js Backbone application based on the todo app by
-// [Jérôme Gravel-Niquet](http://jgn.me/). This demo uses Parse to persist
-// the todo items and provide user authentication and sessions.
-
 $(function() {
 
   Parse.$ = jQuery;
@@ -90,7 +86,7 @@ $(function() {
     el: "#add-business-component",
     events: {
       "click .add-rating-checkbox": "displayAddRatingForm",
-      "submit": "createBusiness"
+      "click  #add-business-submit": "createBusiness"
     },
     initialize: function() {
       var self = this;
@@ -134,11 +130,24 @@ $(function() {
       product.ACL = new Parse.ACL(Parse.User.current());
       var categories = product.relation("Categories");
       var category = new Category();
-      category.id = $("#subSubCategories").val();
-      categories.add(category);
-      
-      product.save();
-      allProducts.add(product);
+      if($("#subSubCategories").val() && $("#subSubCategories").val() !== 'Select One') {
+        category.id = $("#subSubCategories").val();
+      } else if($("#subCategories").val() && $("#subCategories").val() !== 'Select One') {
+        category.id = $("#subCategories").val();
+      }
+      if(category.id) {
+        categories.add(category);
+      }
+      product.save(null, {
+          success: function(product) {
+            console.log("Success! " + product.id);
+            allProducts.add(product);
+            view.mainView.viewBusiness(product, true);
+          },
+          error: function(product, error) {
+            console.log('Failed to create new object, with error code: ' + error.description);            
+          }
+      });
     }    
  });
  
@@ -198,6 +207,10 @@ $(function() {
 
     },
 
+    viewBusiness: function(biz, updated) {
+        this.contentView = new ProductPageView({model: biz}, updated);
+    },
+    
     render: function() {
       this.$el.html(_.template($("#main-template").html())); 
       new SearchNavView();
@@ -224,6 +237,39 @@ $(function() {
 
 
   });
+  
+  
+  var ProductPageView = Parse.View.extend( {
+  el: "#main-content",
+
+  initialize: function() {
+    var self = this;
+    self.render();
+  },
+  template: function() {
+      
+  },
+    render: function() {
+      var product = this.model;
+      var url = product.get("url");
+      var name = product.get("name");
+      var html = _.template($("#product-page-template").html(), { name: name, url: url });
+      this.$el.html(html);
+      if(this.isUpdated) {
+          $('.success').text("You did it biatch!");
+      } else {
+          $('.success').hide();
+      }
+      var categories = product.relation("Categories");
+      categories.query().first( {
+          success: function(obj) {
+              $('#category').html("<h3>" + obj.get("name") + "</h3>");
+          }
+      });
+    }
+
+ });
+ 
 
  /* Call To Action */
  var CallToActionView = Parse.View.extend( {
@@ -602,6 +648,7 @@ var SearchNavView = Parse.View.extend ({
   var AppRouter = Parse.Router.extend({
     routes: {
       "business/add": "addBusiness",
+      "business/:id": "viewBusiness",
       "#": "mainView",
       "home": "mainView"
     },
@@ -611,6 +658,18 @@ var SearchNavView = Parse.View.extend ({
 
     addBusiness: function() {
       view.mainView.displayAddBusinessForm();
+    },
+    
+    viewBusiness: function(id) {
+        var query = new Parse.Query(Product);
+        query.get(id, {
+            success: function(product) {
+                view.mainView.viewBusiness(product, false);
+            },
+            error: function(object, error) {
+                console.log("Unable to find product: " + error.description);
+            }
+        })
     },
     
     mainView: function() {
