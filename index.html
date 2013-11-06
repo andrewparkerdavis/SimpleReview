@@ -15,19 +15,6 @@
     <link rel="stylesheet" href="css/jqtransform.css" type="text/css">
 
 
-		<script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/superfish.js"></script>
-    <script type="text/javascript" src="js/jquery.mobilemenu.js"></script>
-    <script src="js/jquery.jqtransform.js"></script>
-    <script src="js/underscore-1.1.6.js"></script>
-
-    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.1.15.min.js"></script>
-    <script type="text/javascript" src="js/reviews.js"></script>
-
-  
-
-
-
   	<!--[if lt IE 8]>
     		<div style='text-align:center'><a href="http://www.microsoft.com/windows/internet-explorer/default.aspx?ocid=ie6_countdown_bannercode"><img src="http://www.theie6countdown.com/img/upgrade.jpg"border="0"alt=""/></a></div>  
    	<![endif]-->
@@ -185,7 +172,10 @@
 
 <script type="text/template" id="product-page-template">
     <article class="span8">
-     
+        <div class="success">Your business <%= name %> was saved!</div>
+        <h1><%= name %></h1>
+        <h2>website: <%= url %> </h2>
+        <h2>category: <span id="category"></span></h2>
     </article>
 </script>
 
@@ -384,7 +374,7 @@
 <script type="text/template" id="add-business-template">
   <article class="span8">
     <h2>Add Business</h2>
-    <form id="add-business-form">
+    <!-- form id="add-business-form" -->
       <div class="success" style="display: none;">
         Business added!
       </div>
@@ -409,7 +399,7 @@
           <div>
             <div class="txt-form">Website*</div>
               <label class="website">
-                <input type="text" name="website" id="website" />
+                <input type="text" name="website" id="url" />
                 <br>
                 <span class="error" style="display: none;">*This is not a valid url.</span>
                 <span class="empty" style="display: none;">*This field is required.</span>
@@ -427,10 +417,10 @@
             <div id="rating-form"></div>
         </div>
         <div>
-            <input type="submit" name="submit" value="submit" class="btn-2"/>
+            <input id="add-business-submit" type="button" name="submit" value="submit" class="btn-2"/>
         </div>
       </fieldset>
-    </form>
+    <!-- /form -->
   </article>
 
 </script>
@@ -515,10 +505,12 @@
   <div class="container"> 
         
         <div class="row">
+        
           <div id="main-content"> <!-- where the search results or product page gets displayed -->
 
           </div>
-          
+ 	   <h3>Click on this business yo! <a href="index.html#/business/BtgAp3DuAJ">Choatburgers</a></h3>
+         
         </div>
 
   </div>
@@ -526,7 +518,6 @@
 <footer>
   <div class="container">
 	     <div class="row">
-	         
            <article class="span6 fright">
              <ul class="soc-icons">
                <li><a href="#" id="icon"></a></li>
@@ -543,6 +534,15 @@
   </div>
 </footer>
 </script>
+<script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/bootstrap.js"></script>
+<script type="text/javascript" src="js/superfish.js"></script>
+<script type="text/javascript" src="js/jquery.mobilemenu.js"></script>
+<script src="js/jquery.jqtransform.js"></script>
+<script src="js/underscore-1.1.6.js"></script>
+
+<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.1.15.min.js"></script>
+<script type="text/javascript" src="js/reviews.js"></script>
+
 </body>
 </html>
