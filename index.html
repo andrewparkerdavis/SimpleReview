@@ -170,13 +170,157 @@
 
   </script>
 
-<script type="text/template" id="product-page-template">
-    <article class="span8">
-        <div class="success">Your business <%= name %> was saved!</div>
-        <h1><%= name %></h1>
-        <h2>website: <%= url %> </h2>
-        <h2>category: <span id="category"></span></h2>
-    </article>
+
+<script type="text/template" id="business-info-template">
+  <div class="span4 blog-box">
+    <div class="success">Your business <%= name %> was saved!</div>
+    <span><%= name %></span>
+    <div class="div-score">
+      Overall Rating <span>4.5</span>
+      Good!
+    </div>
+    <div class="extra-wrap">
+      Website:  <a href="http://<%= url %>/"><%= url %></a><br/>
+      Category: <span id="topCategory"></span><span id="subCategory"></span><span id="subSubCategory"></span><br/>
+
+      <b>Description</b>
+      <p><%= description %></p>
+    </div>
+  </div>
+
+</script>
+
+<script type="text/template" id="business-logo-template">
+    <div class="span3 blog-box">
+      <span>Business Logo</span>
+          <div class="block-thumbnail maxheight">
+            <figure class="img-polaroid"><img src="img/page-1-img.jpg" alt=""></figure>
+          </div>
+    </div>
+
+</script>
+
+<script type="text/template" id="deals-template">
+    <div class="span7 blog-box">
+      <span>Deals</span>
+      <p>Your deals here!</p>
+    </div>
+</script>
+
+<script type="text/template" id="left-ad-template">
+    <div class="span7 blog-box">
+      <span>Ad</span>
+      <p>Your ad here</p>
+    </div>
+</script>
+
+<script type="text/template" id="reviews-template">
+    <div class="span8">
+
+      <h2>Reviews</h2>
+
+      <!-- A review -->
+
+      <div class="span7 blog-box">
+        <span>Andrea K.s Review</span>
+        <p>Um, the restaurant was like totally closed and stuff. wtf?</p>
+      </div>
+     <div class="span7 blog-box">
+        <span>Joe's Review</span>
+        <p>I'd rather eat dingleberries.</p>
+      </div>
+
+    </div>
+</script>
+
+<script type="text/template" id="right-encourage-template">
+    <div class="span3 blog-box">
+      <span>Please Recommend!</span>
+      <p>You are going to recommend this now!</p>
+    </div>
+</script>
+
+<script type="text/template" id="right-ad-template">
+    <div class="span3 blog-box">
+      <span>This is an Ad</span>
+      <p>Buy this product.  ITs great!</p>
+    </div>
+</script>
+
+<script type="text/template" id="business-page-template">
+         <!-- Left side content -->       
+          
+          
+          
+          <div class="span8">
+            
+            <!-- Business Info Block -->
+            
+            <div id="businessInfoSection">
+              <!-- Insert business-info-template -->
+            </div>
+            
+            <!-- Business Logo Section -->
+            
+            <div id="businessLogoSection">
+              <!-- Insert business-logo-template -->
+            </div>            
+
+            
+
+            <!-- Deals Section -->
+            
+            <div id="dealsSection">
+              <!-- Insert deals-template -->
+            </div>
+
+
+            
+
+            <!-- Left Ad Section -->
+
+            <div id="leftAdSection">
+              <!-- Insert left-ad-template -->
+            </div>
+
+            
+
+
+            <!-- Reviews Section -->
+
+            <div id="reviewsSection">
+              <!-- Insert reviews-template -->
+            </div>
+
+
+          </div>
+
+          <!-- End Left Side Content -->
+
+
+          <!-- Right side content -->        
+
+          <div class="span4">
+
+            <!-- Encourage to Recommend -->
+
+            <div id="rightEncourageSection">
+              <!-- Insert right-encourage-template -->
+            </div>
+
+
+          
+            <!-- Right Side Ad Box -->
+  
+            <div id="rightAdSection">
+              <!-- Insert right-ad-template -->
+            </div>          
+
+
+
+        </div>
+
+        <!-- End Right Side Content -->    
 </script>
 
 <script type="text/template" id="call-to-action-template">
@@ -381,12 +525,12 @@
       <fieldset>
         <div>
           <div>
+            <span class="error" style="display: none;">*This is not a valid description.</span>
+
             <div class="txt-form">Product or Service Reviewed*</div>
               <label class="name">
                 <input type="text" name="name" id="name" />
                 <br>
-                <span class="error" style="display: none;">*This is not a valid name.</span>
-                <span class="empty" style="display: none;">*This field is required.</span>
             </label>
           </div>
           <div>
@@ -401,8 +545,15 @@
               <label class="website">
                 <input type="text" name="website" id="url" />
                 <br>
-                <span class="error" style="display: none;">*This is not a valid url.</span>
-                <span class="empty" style="display: none;">*This field is required.</span>
+            </label>
+          </div>
+        </div>
+        <div>
+          <div>
+            <div class="txt-form">Description</div>
+              <label class="description">
+                <input type="text" name="description" id="description" />
+                <br>
             </label>
           </div>
         </div>

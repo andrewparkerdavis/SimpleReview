@@ -16,7 +16,6 @@ $(function() {
   var Category = Parse.Object.extend("Categories");
   var Rating = Parse.Object.extend("Ratings");
   var Product = Parse.Object.extend("Products");
-
   /* Collections */
   var Categories = Parse.Collection.extend( {
     model: Category
@@ -120,13 +119,9 @@ $(function() {
         }
     },
   createBusiness: function(e) {
-      var self = this;
 //      if (e.keyCode != 13) return;
 
       var product = new Product();
-      product.set("name", $('#name').val());
-      product.set("url", $('#url').val());
-      product.set("createUser", Parse.User.current());
       product.ACL = new Parse.ACL(Parse.User.current());
       var categories = product.relation("Categories");
       var category = new Category();
@@ -134,21 +129,45 @@ $(function() {
         category.id = $("#subSubCategories").val();
       } else if($("#subCategories").val() && $("#subCategories").val() !== 'Select One') {
         category.id = $("#subCategories").val();
+      } else if ($("#topCategories").val() && $("#topCategories").val() !== 'Select One') {
+        category.id = $("#topCategories").val();
+      }
+      var error = "";
+      if(!$('#name').val()) {
+          error += "<li>Name required</li>";
+      } else {
+          product.set("name", $('#name').val());
       }
       if(category.id) {
         categories.add(category);
+      } else {
+          error += "<li>Category required</li>";
       }
-      product.save(null, {
-          success: function(product) {
-            console.log("Success! " + product.id);
-            allProducts.add(product);
-            view.mainView.viewBusiness(product, true);
-          },
-          error: function(product, error) {
-            console.log('Failed to create new object, with error code: ' + error.description);            
-          }
-      });
-    }    
+      if(!$('#url').val()) {
+          error += "<li>Website required</li>";
+      } else {
+          product.set("url", $('#url').val());
+      }
+      product.set("description", $('#description').val());
+      if(error !== "") {
+          $('.error').html("<ul>" + error + "</ul>");
+          $('.error').show();
+      } else {
+        $('.error').hide();
+        product.save(null, {
+            success: function(product) {
+              console.log("Success! " + product.id);
+              allProducts.add(product);
+              view.mainView.viewBusiness(product, true);
+            },
+            error: function(product, error) {
+              console.log('Failed to create new object, with error code: ' + error.description);            
+              $('.error').html(error).show();
+            }
+        });
+          
+      }
+  }
  });
  
  var AddRatingView = Parse.View.extend( {
@@ -253,22 +272,46 @@ $(function() {
       var product = this.model;
       var url = product.get("url");
       var name = product.get("name");
-      var html = _.template($("#product-page-template").html(), { name: name, url: url });
+      var description = product.get("description");
+      var html = _.template($("#product-page-template").html(), { name: name, url: url, description: description });
       this.$el.html(html);
       if(this.isUpdated) {
           $('.success').text("You did it biatch!");
       } else {
           $('.success').hide();
       }
-      var categories = product.relation("Categories");
-      categories.query().first( {
-          success: function(obj) {
-              $('#category').html("<h3>" + obj.get("name") + "</h3>");
-          }
-      });
+      displayAllCategories(product, '#topCategory', '#subCategory', '#subSubCategory');
     }
-
  });
+ 
+ var displayAllCategories = function(product, topDivName, subDivName, subSubDivName) {
+    var categories = product.relation("Categories");
+    categories.query().first( {
+        success: function(category) {
+            $(subSubDivName).html(category.get("name"));
+            var parent = category.get("Parent");
+            if(parent) {
+              parent.fetch({
+                 success:function(parent) {
+                     var uberParent = parent.get("parent");
+                     if(uberParent) {
+                        uberParent.fetch({
+                            success: function(uberParent) {
+                                $(topDivName).html(uberParent.get("name") + " > ");
+                            }
+                        });
+                     }
+                     $(subDivName).html(parent.get("name") + " > ");
+                 },
+                 error: function(parent, error) {
+                     console.log(error);
+                 }
+              });
+          }
+        }
+    });
+     
+ };
  
 
  /* Call To Action */
@@ -528,7 +571,7 @@ var SearchNavView = Parse.View.extend ({
           return this;
       }
   });
-  
+ 
  var CategoriesView = Parse.View.extend({
       events: {
           "change": "changeSelected"
