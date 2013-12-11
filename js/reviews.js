@@ -257,7 +257,11 @@ $(function() {
 
   });
   
-  
+  /*
+   * Product page view
+   * 
+   * @type @exp;Parse@pro;View@call;extend
+   */
   var ProductPageView = Parse.View.extend( {
   el: "#main-content",
 
@@ -270,18 +274,162 @@ $(function() {
   },
     render: function() {
       var product = this.model;
-      var url = product.get("url");
-      var name = product.get("name");
       var description = product.get("description");
-      var html = _.template($("#product-page-template").html(), { name: name, url: url, description: description });
+      var html = _.template($("#business-page-template").html());
       this.$el.html(html);
       if(this.isUpdated) {
           $('.success').text("You did it biatch!");
       } else {
           $('.success').hide();
       }
-      displayAllCategories(product, '#topCategory', '#subCategory', '#subSubCategory');
+      new BusinessInfoSubView({ model: product });
+      new BusinessLogoSubView();
+      new BusinessDealsSubView();
+      new LeftAdSubView();
+      //TODO: load the reviews from the database and pass as model
+      new ReviewsSubView();
+      new EncourageSubView();
+      new RightAdSection();
     }
+ });
+ 
+ /*
+  * 
+  * Product page SubViews
+  */
+ 
+ 
+ /*
+  * Business Info Sub View
+  * business-info-template
+  */
+ var BusinessInfoSubView = Parse.View.extend( {
+     el: "#businessInfoSection",
+     
+     initialize: function() {
+         var self = this;
+         self.render();
+     },
+     
+     render: function() {
+        var product = this.model;
+        var url = product.get("url");
+        var name = product.get("name");
+        var description = product.get("description");
+        var html = _.template($("#business-info-template").html(), { name: name, url: url, description: description });
+        this.$el.html(html);
+        displayAllCategories(product, '#topCategory', '#subCategory', '#subSubCategory');
+     }
+ });
+ 
+ 
+/*
+ * 
+ * Business Logo Section
+ */
+ var BusinessLogoSubView = Parse.View.extend( {
+     el: "#businessLogoSection",
+     
+     initialize: function() {
+         var self = this;
+         self.render();
+     },
+     
+     render: function() {
+        var html = _.template($("#business-logo-template").html(), { });
+        this.$el.html(html);
+     }
+ });
+  
+ /*
+  * 
+  * Business Deals Section
+  */
+ var BusinessDealsSubView = Parse.View.extend( {
+     el: "#dealsSection",
+     
+     initialize: function() {
+         var self = this;
+         self.render();
+     },
+     
+     render: function() {
+        var html = _.template($("#deals-template").html(), { });
+        this.$el.html(html);
+     }
+ });
+ 
+ /*
+  * 
+  * Left Ad Section
+  */
+ var LeftAdSubView = Parse.View.extend( {
+     el: "#leftAdSection",
+     
+     initialize: function() {
+         var self = this;
+         self.render();
+     },
+     
+     render: function() {
+        var html = _.template($("#left-ad-template").html(), { });
+        this.$el.html(html);
+     }
+ });
+ 
+ /*
+  * 
+  * Reviews Section
+  */
+ var ReviewsSubView = Parse.View.extend( {
+     el: "#reviewsSection",
+     
+     initialize: function() {
+         var self = this;
+         self.render();
+     },
+     
+     render: function() {
+        var html = _.template($("#reviews-template").html(), { });
+        this.$el.html(html);
+     }
+ });
+ 
+ /*
+  * 
+  * Encourage Section
+  */
+ var EncourageSubView = Parse.View.extend( {
+     el: "#rightEncourageSection",
+     
+     initialize: function() {
+         var self = this;
+         self.render();
+     },
+     
+     render: function() {
+        var html = _.template($("#right-encourage-template").html(), { });
+        this.$el.html(html);
+     }
+ });
+ 
+ // rightAdSection
+ /*
+  * 
+  * Right Ad Section
+  */
+ var RightAdSection = Parse.View.extend( {
+     el: "#rightAdSection",
+     
+     initialize: function() {
+         var self = this;
+         self.render();
+     },
+     
+     render: function() {
+        var html = _.template($("#right-ad-template").html(), { });
+        this.$el.html(html);
+     }
  });
  
  var displayAllCategories = function(product, topDivName, subDivName, subSubDivName) {
